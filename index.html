@@ -2,7 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Open Peregrine Gantt</title> 
+  <title>Open Peregrine Gantt</title>
+
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
 </head>
 
 <body style="font-family:Arial,sans-serif;text-align:center;padding:40px;">
@@ -10,26 +14,37 @@
   <h2>Opening Peregrine Gantt...</h2>
   <p>If Egnyte does not open automatically, click below.</p>
 
-  <a
-    href="egnyte://peregrineenergy.egnyte.com/navigate/file/0d2789e3-d94c-4120-ac61-3e90b6326fc8"
-    style="
-      display:inline-block;
-      padding:12px 18px;
-      background:#222;
-      color:white;
-      text-decoration:none;
-      border-radius:8px;
-      font-weight:600;
-    "
-  >
+  <a id="openBtn"
+     href="#"
+     style="
+       display:inline-block;
+       padding:12px 18px;
+       background:#222;
+       color:white;
+       text-decoration:none;
+       border-radius:8px;
+       font-weight:600;
+     ">
     Open Full Gantt
   </a>
 
   <script>
-    setTimeout(function () {
-      window.location.href =
-        "egnyte://peregrineenergy.egnyte.com/navigate/file/0d2789e3-d94c-4120-ac61-3e90b6326fc8";
-    }, 500);
+    fetch("config.json?t=" + Date.now(), { cache: "no-store" })
+      .then(response => response.json())
+      .then(config => {
+        const url = config.egnyteUrl;
+
+        document.getElementById("openBtn").href = url;
+
+        setTimeout(function () {
+          window.location.href = url;
+        }, 500);
+      })
+      .catch(err => {
+        console.error(err);
+        document.querySelector("h2").textContent =
+          "Unable to load Gantt link";
+      });
   </script>
 
 </body>
